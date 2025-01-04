@@ -11,7 +11,7 @@ import { Sheet, SheetContent, SheetTrigger } from './ui/sheet'
 
 const routes = [
     {
-        href: "",
+        href: "/",
         label: "Home",
         icon: HomeIcon
     },
@@ -53,10 +53,7 @@ function DesktopDidebar() {
                         key={route.href}
                         href={route.href}
                         className={buttonVariants({
-
                             variant: activeRoute.href === route.href ? "sideBarActiveItem" : "sideBarItem"
-
-
                         })}
                     >
                         <route.icon size={20} />
