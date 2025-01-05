@@ -1,8 +1,9 @@
-import { getWorkflowsforUser } from '@/actions/workflows/getworkflowsforuser'
+import { getWorkflowsforUser } from '@/actions/workflows/getWorkflowsforUser'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Skeleton } from '@/components/ui/skeleton'
 import { AlertCircle, InboxIcon } from 'lucide-react'
 import React, { Suspense } from 'react'
+import CreateWorkflowDialog from './_components/CreateWorkflowDialog'
 
 function WorkflowsPage() {
     return (
@@ -14,7 +15,10 @@ function WorkflowsPage() {
                         Manage Your Workflows
                     </p>
                 </div>
+                <CreateWorkflowDialog/>
+
             </div>
+
             <div className='h-full py-6'>
                 <Suspense fallback={<UserWorkFlowsSkeleton></UserWorkFlowsSkeleton>}>
                     <UserWorkflows />
@@ -63,9 +67,8 @@ async function UserWorkflows() {
                     </p>
 
                 </div>
-
+                <CreateWorkflowDialog trigerText='Create your first workflow'/>
             </div>
-
         )
 
     }
