@@ -1,13 +1,15 @@
 import { getWorkflowsforUser } from '@/actions/workflows/getWorkflowsforUser'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Skeleton } from '@/components/ui/skeleton'
-import { AlertCircle, InboxIcon } from 'lucide-react'
+import { AlertCircle, InboxIcon, Workflow } from 'lucide-react'
 import React, { Suspense } from 'react'
 import CreateWorkflowDialog from './_components/CreateWorkflowDialog'
+import { json } from 'stream/consumers'
+import WorkflowCard from './_components/WorkflowCard'
 
 function WorkflowsPage() {
     return (
-        <div className='flex-1 flex flex-col h-full'>
+        <div className='flex-1 flex px-4 flex-col h-full'>
             <div className='flex justify-between'>
                 <div className='flex flex-col'>
                     <h1 className='text-3xl font-bold'>workflows</h1>
@@ -75,7 +77,13 @@ async function UserWorkflows() {
 
 
 
-    return <div>sd</div>
+    return (
+        <div className="grid grid-cols-1 gap-4">
+            {workflows.map((workflow) => (
+                <WorkflowCard key={workflow.id} workflow={workflow} />
+            ))}
+        </div>
+    );
 }
 
 export default WorkflowsPage
