@@ -11,7 +11,8 @@ import { Workflow } from '@prisma/client'
 import { DropdownMenuGroup } from '@radix-ui/react-dropdown-menu'
 import { FileTextIcon, MoreVerticalIcon, PlayIcon, Shuffle, ShuffleIcon, TrashIcon } from 'lucide-react'
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
+import DeleteWorkflowDialog from './DeleteWorkflowDialog'
 
 
 const statusColors = {
@@ -71,7 +72,7 @@ function WorkflowCard({ workflow }: { workflow: Workflow }) {
             <ShuffleIcon size={16} />
             Edit
           </Link>
-          <WorkFlowActions />
+          <WorkFlowActions workflowname={workflow.name} />
 
 
 
@@ -84,29 +85,39 @@ function WorkflowCard({ workflow }: { workflow: Workflow }) {
   )
 }
 
-function WorkFlowActions() {
+function WorkFlowActions({workflowname}:{workflowname:string}) {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+
+
   return (
+    <>
+    <DeleteWorkflowDialog open={showDeleteDialog} setOpen={setShowDeleteDialog} workflowname={workflowname}>
 
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant={"outline"} size={'sm'}>
-          <ToolTipWrapper content={"More Actions"}>
-            <MoreVerticalIcon size={18} />
-          </ToolTipWrapper>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align='end'>
-        <DropdownMenuLabel> Actions</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem className='text-destructive flex items-center gap-2'>
-          <TrashIcon size={16}/>
-          Delete
-        </DropdownMenuItem>
-      </DropdownMenuContent>
+    </DeleteWorkflowDialog>
 
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant={"outline"} size={'sm'}>
+            <ToolTipWrapper content={"More Actions"}>
+              <MoreVerticalIcon size={18} />
+            </ToolTipWrapper>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align='end'>
+          <DropdownMenuLabel> Actions</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onSelect={() => {
+            setShowDeleteDialog((prev) => !prev)
+          }} className='text-destructive flex items-center gap-2'>
+            <TrashIcon size={16} />
+            Delete
+          </DropdownMenuItem>
+        </DropdownMenuContent>
 
-    </DropdownMenu>
+      </DropdownMenu>
+    </>
   )
+
 }
 
 export default WorkflowCard
