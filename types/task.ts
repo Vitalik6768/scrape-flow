@@ -1,3 +1,7 @@
 export enum TaskType{
-    LUNCH_BROWSER = "LUNCH_BROWSER"
+    LAUNCH_BROWSER = "LAUNCH_BROWSER"
+}
+
+export enum TaskParamType{
+    STRING = "STRING"
 }

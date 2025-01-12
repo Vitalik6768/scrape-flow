@@ -22,8 +22,18 @@ import {
 import React, { useCallback, useState } from 'react'
 import { CreateFlowNode } from '@/lib/workflow/CreateFlowNode';
 import { TaskType } from '@/types/task';
+import NodeComponent from './nodes/NodeComponent';
+import { number } from 'zod';
 
 
+
+
+const nodeTypes ={
+    FlowScrapeNode:NodeComponent
+}
+
+const snapGrid : [number, number] = [50, 50]
+const fitViewOptions = {padding: 1}
 
 function FlowEditor({ workflow }: { workflow: Workflow }) {
 
@@ -32,9 +42,7 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
       ];
     const initialEdges: Edge[] = [];
 
-
-
-    const [nodes, setNodes] = useState<any>([CreateFlowNode(TaskType.LUNCH_BROWSER)]);
+    const [nodes, setNodes] = useState<any>([CreateFlowNode(TaskType.LAUNCH_BROWSER)]);
     const [edges, setEdges] = useState([]);
 
 
@@ -55,12 +63,16 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
                 edges={edges}
                 onNodesChange={onNodesChange}
                 onEdgesChange={onEdgesChange}
+                nodeTypes={nodeTypes}
+                snapToGrid
+                snapGrid={snapGrid}
+                fitViewOptions={fitViewOptions}
+                fitView
             >
                 <Background />
 
-                <Controls position='top-left' />
+                <Controls position='top-left' fitViewOptions={fitViewOptions} />
             </ReactFlow>
-
 
         </main>
 
