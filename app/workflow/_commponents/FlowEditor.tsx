@@ -19,11 +19,12 @@ import {
     useReactFlow,
 } from "@xyflow/react";
 
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { CreateFlowNode } from '@/lib/workflow/CreateFlowNode';
 import { TaskType } from '@/types/task';
 import NodeComponent from './nodes/NodeComponent';
 import { number } from 'zod';
+
 
 
 
@@ -42,8 +43,9 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
       ];
     const initialEdges: Edge[] = [];
 
-    const [nodes, setNodes] = useState<any>([CreateFlowNode(TaskType.LAUNCH_BROWSER)]);
+    const [nodes, setNodes] = useState<any>([]);
     const [edges, setEdges] = useState([]);
+    const {setViewport, screenToFlowPosition} = useReactFlow()
 
 
     const onNodesChange = useCallback((changes:any) => {
@@ -53,6 +55,51 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
       const onEdgesChange = useCallback((changes:any) => {
         setEdges((prevEdges) => applyEdgeChanges(changes, prevEdges));
       }, []);
+
+
+      const onDragOver = useCallback((event:React.DragEvent) => {
+        event.preventDefault();
+        event.dataTransfer.dropEffect = "move"
+      },[])
+      
+      const onDrop = useCallback((event:React.DragEvent) => {
+        event.preventDefault();
+        const taskType = event.dataTransfer.getData("application/reactflow")
+        if(!taskType){
+            return
+        }
+        const position = screenToFlowPosition(
+            {
+                x: event.clientX,
+                y: event.clientY
+            }
+        )
+
+        const newNode = CreateFlowNode(taskType as TaskType, position)
+        setNodes((nds:Node[]) => nds.concat(newNode))
+      },[])
+
+
+
+      useEffect(()=>{
+        try{
+            const flow = JSON.parse(workflow.definition)
+            if(!flow){
+                return
+            }
+            setNodes(flow.nodes || [])
+            setEdges(flow.edges || [])
+            if(!flow.viewport){
+                return
+            }
+
+            const {x =0, y =0, zoom =1} = flow.viewport
+            setViewport({x, y, zoom})
+        }catch(error){
+            console.log(error)
+        }
+    
+      },[workflow.definition, setNodes, setEdges, setViewport])
 
 
 
@@ -67,6 +114,9 @@ function FlowEditor({ workflow }: { workflow: Workflow }) {
                 snapToGrid
                 snapGrid={snapGrid}
                 fitViewOptions={fitViewOptions}
+                onDragOver={onDragOver}
+                onDrop={onDrop}
+
                 fitView
             >
                 <Background />
