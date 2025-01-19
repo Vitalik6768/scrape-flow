@@ -14,6 +14,8 @@ export default function TaskMenu() {
                     <AccordionTrigger className='font-bold'>Data Extraction</AccordionTrigger>
                     <AccordionContent className='flex flex-col gap-1'>
                         <TaskMenuButton TaskType={TaskType.PAGE_TO_HTML}></TaskMenuButton>
+                        <TaskMenuButton TaskType={TaskType.EXTRACT_TEXT_FROM_ELEMENT}></TaskMenuButton>
+
                     </AccordionContent>
                 </AccordionItem>
             </Accordion>
